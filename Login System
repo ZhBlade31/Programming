@@ -1,0 +1,26 @@
+def login():
+    account = input("Hi welcome to Michael's login! Do you already have an account? (y,n): ")
+    if account.lower() in ["no","n"]:
+        newu = input("Create your username: ")
+        newp = input("Create your password: ")
+        with open("userlist.txt","a+") as file:
+            file.write(newu + newp + "\n")
+        print("Welcome!")
+    else:
+        with open("userlist.txt","r") as file:
+            list = file.read()
+        user = input("Enter your username: ")
+        if user in list:
+            password = input("Enter your password: ")
+            if user+password in list:
+                print("Welcome!")
+            else:
+                print("Invalid Password, restart please")
+        else:
+            print("Not a valid username")
+            exit()
+
+
+
+
+login()
