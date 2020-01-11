@@ -1,0 +1,122 @@
+import random
+
+deck = [2,3,4,5,6,7,8,9,10,11,12,13,14]*4
+def deal(deck):
+    hand = []
+    for i in range (2):
+        random.shuffle(deck)
+        card=deck.pop()
+        if card == 11: card = "J"
+        if card == 12: card = "Q"
+        if card == 13: card = "K"
+        if card == 14: card = "A"
+        hand.append(card)
+    return (hand)
+
+
+def total(hand):
+    total = 0
+    for card in hand:
+        if card == "J" or card == "Q" or card == "K":
+            total+= 10
+        elif card == "A":
+            if total >= 11: total+= 1
+            else: total+= 11
+        else:
+            total += card
+    return total
+
+
+
+def hit(hand):
+    card = deck.pop()
+    if card == 11: card = "J"
+    if card == 12: card = "Q"
+    if card == 13: card = "K"
+    if card == 14: card = "A"
+    hand.append(card)
+    return hand
+
+def blackjack(dealer_hand, player_hand):
+    if total(dealer_hand) == 21 and total(player_hand) == 21:
+        print("Tie! No one wins")
+        exit()
+    elif total(dealer_hand) == 21:
+        print("The dealer has blackjack with the hand of ", dealer_hand)
+        print("Better luck next time.")
+        exit()
+    elif total(player_hand) == 21:
+        print("You have won!")
+        exit()
+    else:
+        pass
+def print_hands(dealer_hand, player_hand):
+    print("Your hand is: ", str(player_hand) ,"with a total value of: ", total(player_hand),"\n")
+    print("The dealer is showing a: ", str(dealer_hand[0]), "\n")
+
+def choice():
+    choice = input("Do you want to (h)it, (s)tand, or (q)uit?").lower()
+    return choice
+
+def choices(player_hand,dealer_hand):
+    input = 0
+    input = choice()
+    if input == "h":
+        while input == "h":
+            player_hand = hit(player_hand)
+            print("Your hand is: ", str(player_hand), "with a total value of: ", total(player_hand))
+            if total(player_hand) > 21:
+                print("Sorry you busted! Better luck next time.\n")
+                exit()
+            else:
+                choices(player_hand,dealer_hand)
+    elif input == "s":
+        while total(dealer_hand) <17:
+            dealer_hand = hit(dealer_hand)
+            if total(dealer_hand) >21:
+                print("Dealer has busted with his hand of ", dealer_hand," at a value of:" ,total(dealer_hand), "! You win!")
+                exit()
+            elif total(dealer_hand) > total(player_hand):
+                print("The dealer reveals his hand of: ", str(dealer_hand), "with a total value of: ", total(dealer_hand), "\n")
+                print("The dealer has won! better luck next time.")
+                exit()
+            elif total(dealer_hand) == 21:
+                blackjack(dealer_hand, player_hand)
+            else:
+                print("The tensions grows")
+        if total(dealer_hand) > total(player_hand):
+            print("The dealer reveals his hand of: ", str(dealer_hand), "with a total value of: ", total(dealer_hand),
+                  "\n")
+            print("The dealer has won! better luck next time.")
+            exit()
+        elif total(dealer_hand) == total(player_hand):
+            print("The dealer reveals his hand of: ", str(dealer_hand), "with a total value of: ", total(dealer_hand),
+                  "\n")
+            print("You tie with the dealer with a hand of ", str(player_hand), "at a value of: ", total(player_hand))
+            exit()
+        else:
+            print("The dealer reveals his hand of: ", str(dealer_hand), "with a total value of: ", total(dealer_hand),
+                  "\n")
+            print("You win with your hand of ", str(player_hand),"at a value of: ", total(player_hand) )
+            exit()
+    else:
+        print("See you around!")
+        exit()
+
+
+
+
+
+
+
+
+def game():
+    print("Welcome to BLACKJACK!")
+    dealer_hand = deal(deck)
+    player_hand = deal(deck)
+    print_hands(dealer_hand,player_hand)
+    blackjack(dealer_hand, player_hand)
+    choices(player_hand, dealer_hand)
+
+
+game()
