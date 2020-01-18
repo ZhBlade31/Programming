@@ -1,0 +1,186 @@
+import random
+
+
+moves = [1,2,3,4,5,6,7,8,9]
+
+def print_board(board):
+    print(board[0],board[1],board[2])
+    print(board[3],board[4],board[5])
+    print(board[6], board[7], board[8])
+
+def choose(shape):
+    if shape in ["x", "X"]:
+        return "X"
+    elif shape in ["o","O"]:
+        return "O"
+    else:
+        print("That is an invalid shape")
+
+def computer_shape(player_shape):
+    if player_shape == "X":
+        return "O"
+    else:
+        return "X"
+
+def compwin(computer_pos):
+    computer = set(computer_pos)
+    a = [1, 2, 3]
+    b = [4, 5, 6]
+    c = [7, 8, 9]
+    d = [1, 4, 7]
+    e = [2, 5, 8]
+    f = [3, 6, 9]
+    g = [1, 5, 9]
+    h = [3, 5, 7]
+
+    if set(a).issubset(computer):
+        return True
+    if set(b).issubset(computer):
+        return True
+    if set(c).issubset(computer):
+        return True
+    if set(d).issubset(computer):
+        return True
+    if set(e).issubset(computer):
+        return True
+    if set(f).issubset(computer):
+        return True
+    if set(g).issubset(computer):
+        return True
+    if set(h).issubset(computer):
+        return True
+    return False
+
+def playerwin(player_pos):
+    player = set(player_pos)
+    a = [1,2,3]
+    b = [4,5,6]
+    c = [7,8,9]
+    d = [1,4,7]
+    e = [2,5,8]
+    f = [3,6,9]
+    g = [1,5,9]
+    h = [3,5,7]
+
+    if set(a).issubset(player):
+        return True
+    if set(b).issubset(player):
+        return True
+    if set(c).issubset(player):
+        return True
+    if set(d).issubset(player):
+        return True
+    if set(e).issubset(player):
+        return True
+    if set(f).issubset(player):
+        return True
+    if set(g).issubset(player):
+        return True
+    if set(h).issubset(player):
+        return True
+    return False
+
+def tie(board):
+    checkboard = [s for s in board if s.isdigit()]
+    if checkboard == []:
+        print("No one wins.")
+        quit()
+
+def isspacefree(board,move):
+    return board[move] == ''
+
+def player_turn(player_pos,computer_pos):
+    choice = 0
+    spot=input("Where do you want to go?")
+    while choice ==0:
+        if int(spot) not in player_pos or computer_pos:
+            return int(spot)
+
+        else:
+            print("That is an invalid spot")
+            player_turn(player_pos, computer_pos)
+
+def chooserandommove(player_pos,computer_pos,moveslist):
+    possiblemoves = []
+    for i in moveslist:
+        if i not in player_pos:
+            if i not in computer_pos:
+                possiblemoves.append(i)
+    if len(possiblemoves) != 0:
+        return random.choice(possiblemoves)
+    else:
+        return None
+
+
+def computer_turn(y,x):
+    for i in range (1,10):
+        if i not in y:
+            if i not in x:
+                x.append(i)
+                if compwin(x) == True:
+                    return i
+    for i in range(1,10):
+        if i not in y:
+            if i not in x:
+                y.append(i)
+                if playerwin(y) == True:
+                    return i
+    move = chooserandommove(y,x, [1, 3, 7, 9])
+    if move != None:
+        return move
+    if 5 not in y and x:
+        return 5
+    return chooserandommove(y,x, [2, 4, 6, 8])
+
+def playerplacement(player_pos, board, player_letter):
+    spot = player_pos[-1]
+    letter = player_letter
+    board[spot-1] = letter
+    return board
+
+def computerplacement(computer_pos,board,computer_letter):
+    spot = computer_pos[-1]
+    letter = computer_letter
+    board[spot-1] = letter
+    return board
+
+
+
+print("Welcome to Tic Tac Toe")
+board = ['_']*10
+player_pos = []
+computer_pos = []
+player_letter = choose(input("Do you want to be (X)'s or (O)'s"))
+computer_letter = computer_shape(player_letter)
+print("1 ","2 ","3 ")
+print("4 ","5 ","6 ")
+print("7 ","8 ","9 ")
+while True:
+    spot = player_turn(player_pos,computer_pos)
+    player_pos.append(spot)
+    board = playerplacement(player_pos,board,player_letter)
+    print_board(board)
+    print(" ")
+    print(" ")
+    if playerwin(player_pos) == True:
+        print("You have won")
+        quit()
+    copycomputerpos = list.copy(computer_pos)
+    copyplayerpos = list.copy(player_pos)
+    i = (computer_turn(copyplayerpos,copycomputerpos))
+    computer_pos.append(i)
+    newcomputer = computer_pos
+    board = computerplacement(newcomputer,board,computer_letter)
+    print(board)
+    print_board(board)
+    print(newcomputer)
+    print(" ")
+    print(" ")
+    if compwin(newcomputer) == True:
+        print("Computer has won")
+        quit()
+
+
+
+
+
