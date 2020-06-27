@@ -1,0 +1,19 @@
+import numpy as np
+from PIL import ImageGrab
+import cv2
+import time
+import pytesseract
+from pynput.keyboard import Key, Controller
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+
+last_time=time.time()
+while(True):
+#valorant: (566,989,654,1045)
+#overwatch: (264,908,324,939)
+	screen = np.array(ImageGrab.grab(bbox = (264,900,324,950)))
+	cv2.imshow('window',cv2.cvtColor(screen,cv2.COLOR_BGR2RGB))
+	hp = pytesseract.image_to_string(screen)
+	print(hp)
+	if cv2.waitKey(25) & 0xFF == ord('q'):
+		cv2.destroyAllWindows()
+		break
